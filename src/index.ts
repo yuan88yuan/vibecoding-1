@@ -339,7 +339,9 @@ async function handleAgentPage(agentId: string, env: Env) {
 					body: JSON.stringify({ message: text })
 				});
 				const data = await resp.json();
-				if (data.steps) {
+				if (data.error) {
+					append('tool', 'Error: ' + (data.message || data.error));
+				} else if (data.steps) {
 					for (const step of data.steps) {
 						if (step.role === 'tool') append('tool', step.content);
 						else append('ai', step.content);
